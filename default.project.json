@@ -1,0 +1,57 @@
+{
+    "name": "Prefab",
+    
+    "tree": {
+        "$className": "DataModel",
+
+        "ServerScriptService": {
+            "$className": "ServerScriptService",
+            "$path": "src/serverscriptservice"
+        },
+
+        "ServerStorage": {
+            "$className": "ServerStorage",
+            "$path": "src/serverstorage"
+        },
+
+        "StarterPlayer": {
+            "$className": "StarterPlayer",
+            "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
+                "$path": "src/playerscripts"
+            }
+        },
+
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "$path": "src/replicatedstorage",
+            "$ignoreUnknownInstances": true
+        },
+
+        "ReplicatedFirst": {
+            "$className": "ReplicatedFirst",
+            "$path": "src/replicatedfirst"
+        },
+
+        "Workspace": {
+            "$className": "Workspace",
+            "$properties": {
+                "FilteringEnabled": true
+            }
+        },
+
+        "SoundService": {
+            "$className": "SoundService",
+            "$properties": {
+                "RespectFilteringEnabled": true
+            }
+        },
+        
+        "HttpService": {
+            "$className": "HttpService",
+            "$properties": {
+                "HttpEnabled": true
+            }
+        }
+    }
+}

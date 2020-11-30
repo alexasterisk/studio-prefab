@@ -1,0 +1,14 @@
+{
+    "Name": "Remotes",
+    "ClassName": "Folder",
+    "Children": [
+        {
+            "Name": "MasterFunctionKey",
+            "ClassName": "RemoteFunction"
+        },
+        {
+            "Name": "MasterEventKey",
+            "ClassName": "RemoteEvent"
+        }
+    ]
+}
