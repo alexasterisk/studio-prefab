@@ -1,5 +1,5 @@
--- ++ 30.11.2020
--- Have immedaite dependencies prefabricated.
+-- // 1.12.2020
+-- Have immediate dependencies prefabricated.
 
 local Depends = {}
 
