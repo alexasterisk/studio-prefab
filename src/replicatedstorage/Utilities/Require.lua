@@ -1,4 +1,4 @@
--- ++ 30.11.2020
+-- // 1.12.2020 [Fixed ~= nil checking]
 -- A way to serialize multiple modules under a table, convienent.
 
 return function(Search, Modules)
