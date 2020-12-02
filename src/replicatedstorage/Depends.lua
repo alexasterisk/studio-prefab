@@ -1,5 +1,5 @@
 -- ++ 30.11.2020
--- // 2.12.2020 [Fixed typo]
+-- // 2.12.2020 [Add IsMobile / Utils > Utilities]
 
 local Depends = {}
 
@@ -44,7 +44,7 @@ do
         Depends.Utilities = Depends.PlayerScripts:WaitForChild("Utilities")
 
         -- Client - Prebuilt
-
+        Depends.IsMobile = Depends.UserInputService.TouchEnabled and not Depends.UserInputService.KeyboardEnabled and not Depends.UserInputService.MouseEnabled and not Depends.UserInputService.GamepadEnabled
 
         -- Client - Other (Not prefabricated)
 
@@ -61,7 +61,7 @@ do
 
         -- Server - Locations
         Depends.Modules = Depends.ServerStorage:WaitForChild("Modules")
-        Depends.Util = Depends.ServerStorage:WaitForChild("Utilities")
+        Depends.Utilities = Depends.ServerStorage:WaitForChild("Utilities")
 
         -- Server - Prebuilt
         Depends.ChatService = require(Depends.ServerScriptService:WaitForChild("ChatServiceRunner"):WaitForChild("ChatService"))
