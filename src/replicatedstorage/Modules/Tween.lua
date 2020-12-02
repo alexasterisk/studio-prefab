@@ -1,4 +1,5 @@
 -- ++ 30.11.2020
+-- // 2.12.2020 [~= nil checking]
 -- Prebuilt Tween Module, allows tables, auto-play, and default values if forgotten to set.
 
 -- -- Documentation
@@ -15,7 +16,7 @@ local TweenService = game:GetService("TweenService")
 
 local function TweenNextObject(Object, Info, Dictionary, AutoPlay, DefaultValues)
     local TweenObject = TweenService:Create(Object, Info, Dictionary)
-    if DefaultValues ~= nil then
+    if DefaultValues then
         for Property, Value in pairs(DefaultValues) do
             Object[Property] = Value
         end
