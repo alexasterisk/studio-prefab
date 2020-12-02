@@ -1,6 +1,6 @@
 -- ++ 30.11.2020
 -- // 2.12.2020 [~= nil checking]
--- A way to serialize multiple modules under a table, convienent.
+
 
 return function(Search, Modules)
     local Objects = {}

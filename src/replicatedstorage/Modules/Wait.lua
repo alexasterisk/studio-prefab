@@ -1,6 +1,5 @@
 -- ++ 30.11.2020
 -- // 1.12.2020 [Fixed spacing]
--- Just a better wait function.
 
 -- -- Documentation
 -- ++    Module(): Function => Number
