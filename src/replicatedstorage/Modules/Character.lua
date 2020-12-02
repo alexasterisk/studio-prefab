@@ -1,5 +1,16 @@
 -- ++ 2.12.2020
---
+-- // 2.12.2020 [Add Documentation]
+-- @module characterUtils
+
+-- -- Documentation
+-- ++      Module: table pairs{string = function}
+-- => Description: Main handler for character functions.
+-- >> ++ GetHumanoid(): Humanoid
+-- >> =>   Description: Gets the Humanoid of a Character.
+-- >> +>          Arg1: Descendant = Instance
+-- >> ++ ForceUnseat()
+-- >> =>   Description: Forcefully unsits a Humanoid.
+-- >> +>          Arg1: Humanoid = Humanoid
 
 local Utilities = {}
 
