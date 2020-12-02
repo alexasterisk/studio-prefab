@@ -1,4 +1,5 @@
 -- ++ 30.11.2020
+-- // 2.12.2020 [Return ClassIndexer if failed]
 -- An optimized method of preloading asset(s) binarically.
 
 -- -- Documentation
@@ -24,6 +25,8 @@ local function ClassIndexer(Object)
     if AcceptedClasses[Object.ClassName] then
         return AcceptedClasses[Object.ClassName]
     end
+
+    return false
 end
 
 return function(Object, ReturnCallback)
