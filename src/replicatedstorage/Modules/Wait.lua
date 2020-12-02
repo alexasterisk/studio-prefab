@@ -1,4 +1,4 @@
--- ++ 30.11.2020
+-- ++ 1.12.2020 [Fixed Spacing]
 -- Just a better wait function.
 
 -- -- Documentation
@@ -7,6 +7,7 @@
 -- +>        Arg1: Number = Number
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
+
 return function(Number)
     Number = Number or .0001
     local TimeStarted = tick()
