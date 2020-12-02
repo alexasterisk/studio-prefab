@@ -1,4 +1,5 @@
 -- ++ 30.11.2020
+-- // 1.12.2020 [Fixed spacing]
 -- Just a better wait function.
 
 -- -- Documentation
@@ -7,11 +8,13 @@
 -- +>        Arg1: Number = Number
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
+
 return function(Number)
     Number = Number or .0001
     local TimeStarted = tick()
     while true do
         Depends.RunService.Heartbeat:Wait()
+
         local Difference = tick() - TimeStarted
         if Difference >= Number then
             return Difference
