@@ -1,5 +1,6 @@
 -- ++ 30.11.2020
--- Have immedaite dependencies prefabricated.
+-- // 2.12.2020 [Fixed typo]
+-- Have immediate dependencies prefabricated.
 
 local Depends = {}
 
@@ -20,10 +21,10 @@ do
 
     -- Shared - Prebuilt
     Depends.Require = require(Depends.SUtil:WaitForChild("Require"))
-
-    -- Shared - Other (Not prefabricated)
     Depends.EventKey = Depends.Remotes:WaitForChild("MasterEventKey")
     Depends.FunctionKey = Depends.Remotes:WaitForChild("MasterFunctionKey")
+
+    -- Shared - Other (Not prefabricated)
 
 
     local IsClient = Depends.RunService:IsClient()
@@ -55,7 +56,6 @@ do
         Depends.MarketplaceService = game:GetService("MarketplaceService")
         Depends.BadgeService = game:GetService("BadgeService")
         Depends.ServerScriptService = game:GetService("ServerScriptService")
-        Depends.DataStoreService = game:GetService("DataStoreService")
         Depends.PhysicsService = game:GetService("PhysicsService")
         Depends.GroupService = game:GetService("GroupService")
         Depends.Chat = game:GetService("Chat")
