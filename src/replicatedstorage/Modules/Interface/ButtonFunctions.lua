@@ -1,5 +1,5 @@
 -- ++ 2.12.2020 [Create ButtonFunctions]
--- // 2.12.2020 [Use PlayerModules]
+-- // 2.12.2020 [Use Shared Modules]
 -- Handles GUI Button based things.
 
 -- -- Documentation
@@ -9,8 +9,7 @@
 -- +>        Arg2: Function = Function
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-local Modules = Depends.Require(Depends.SModules, {"Tween", "Spawn"})
-local PModules = Depends.Require(Depends.Modules, {"Wait"})
+local Modules = Depends.Require(Depends.SModules, {"Tween", "Spawn", "Wait"})
 
 local Functions = {}
 
@@ -76,7 +75,7 @@ Functions.OnClick = function(self, PosX, PosY)
         Size = UDim2.new(0, 0, 0, 0)
     })
 
-    PModules.Wait(.76)
+    Modules.Wait(.76)
     local FinalTween = Modules.Tween.new(self.Button, TweenInfo.new(.35, Enum.EasingStyle.Elastic), {
         Position = UDim2.new(2, 0, 2, 0),
         Size = UDim2.new(self.Mock.Size.X.Scale * .1, 0, self.Mock.Size.Y.Scale * .1, 0)
