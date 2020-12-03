@@ -1,5 +1,5 @@
 -- ++ 30.11.2020
--- // 2.12.2020 [Return ClassIndexer if failed]
+-- // 2.12.2020 [User PlayerModules]
 -- An optimized method of preloading asset(s) binarically.
 
 -- -- Documentation
@@ -9,7 +9,7 @@
 -- ?>        Arg2: ReturnCallback = Boolean
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-local Modules = Depends.Require(Depends.SModules, {"Wait"})
+local Modules = Depends.Require(Depends.Modules, {"Wait"})
 local HookEvent = Instance.new("BindableEvent", script)
 HookEvent.Name = "Hook"
 
