@@ -1,56 +1,46 @@
 -- ++ 2.12.2020 [Create Remotes]
+-- // 3.12.2020 [Server to Client Support]
 -- Handle all Remote requests.
 
 -- -- Documentation
 -- ++     Remotes: table pairs{string = Function}
 -- => Description: Handle all Remote requests.
--- >> ++ GetRemote(): Function = table pairs{string = Function}
--- >> => Description: Gets the correct remote for the request.
+-- >> ++ GetEvent(): Function = table pairs{string = Function}
+-- >> => Description: Gets the correct RemoteEvent for the request.
 -- >> +>        Arg1: Name = string
+-- >> ++ GetFunction(): Function = table pairs{string = Function}
+-- >> => Description: Gets the correct RemoteFunction for the request.
+-- >> +> Arg1: Name = string
 -- >> >> ++      Send(): Function = any
 -- >> >> => Description: Sends the data to the remote.
 -- >> >> +>         ...: ... = any
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-
 local IsClient = Depends.RunService:IsClient()
-local Functions, Events = Depends.FunctionKey:InvokeServer("GetAllRequests")
 
 local Remotes = {}
+local Functions = {}
 
-function Remotes:GetRemote(Name)
-    assert(type(Name) == "string", "Expected string, got " .. typeof(Name))
-    local Function
-    for _, Value in ipairs(Functions) do
-        if Value == Name then
-            Function = "Invoke"
-            break
-        end
-    end
+function Functions:Send(...)
+    local MasterKey = Depends[self.Is == "Fire" and "EventKey" or "FunctionKey"]
+    self.Is += IsClient and "Server" or "Client"
 
-    for _, Value in ipairs(Events) do
-        if Value == Name then
-            Function = "Fire"
-            break
-        end
-    end
+    return MasterKey[self.Is](MasterKey, self.Throw, ...)
+end
 
-    if not Function then
-        return error("Could not find the remote for " .. Name)
-    end
+function Remotes:GetEvent(Name)
+    local Metatable = setmetatable({}, Functions)
+    Metatable.Is = "Fire"
+    Metatable.Throw = Name
+    return Metatable
+end
 
-    local Table = {}
+function Remotes:GetFunction(Name)
+    local Metatable = setmetatable({}, Functions)
+    Metatable.Is = "Invoke"
+    Metatable.Throw = Name
 
-    function Table:Send(...)
-        if Function == "Fire" then
-            Depends.EventKey[Function .. IsClient and "Server" or "Client"](Depends.EventKey, Name, ...)
-            return true
-        else
-            return Depends.FunctionKey[Function .. IsClient and "Server" or "Client"](Depends.FunctionKey, Name, ...)
-        end
-    end
-
-    return Table
+    return Metatable
 end
 
 return Remotes
