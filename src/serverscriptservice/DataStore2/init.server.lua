@@ -1,4 +1,5 @@
 -- ++ 2.12.2020
+-- // 6.12.2020 [Remove type checking]
 -- DataStore2 parser.
 
 -- -- Documentation
@@ -13,7 +14,7 @@ local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depen
 local DataStoreService = game:GetService("DataStoreService")
 
 local Caller = Instance.new("BindableFunction", script.Parent)
-local DataStore2 = require(1936396537)
+local DataStore2 = require(script:WaitForChild("DataStore2"))
 script.Parent = Caller
 
 local DataStores = {}
@@ -28,7 +29,7 @@ local ConvertFunction = {
 DataStore2.PatchGlobalSettings({SavingMethod = "OrderedBackups"})
 DataStore2.Combine("DATA")
 
-Caller.OnInvoke = function(DataStore, Player: any, Function, ...) -- assigned so VSCode stops yelling at me
+Caller.OnInvoke = function(DataStore, Player, Function, ...)
     assert(type(DataStore) == "string", "Expected string for DataStore, got " .. typeof(DataStore))
     assert(type(Player) == "number" or type(Player) == "string" or typeof(Player) == "Instance", "Expected number|string|Instance for Player, got " .. typeof(Player))
     assert(type(Function) == "string", "Expected string for Function, got " .. typeof(Function))
@@ -65,7 +66,7 @@ Caller.OnInvoke = function(DataStore, Player: any, Function, ...) -- assigned so
     return false, string.format("Player type %s couldn't be converted into Instance|number", typeof(Player))
 end
 
-Depends.Players.PlayerRemoving:Connect(function(Player: Instance)
+Depends.Players.PlayerRemoving:Connect(function(Player)
     DataStore2.SaveAll(Player)
     DataStores[Player.UserId] = nil
 end)
