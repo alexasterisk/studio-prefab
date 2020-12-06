@@ -1,5 +1,5 @@
 -- ++ 30.11.2020
--- // 2.12.2020 [Add IsMobile / Utils > Utilities]
+-- // 6.12.2020 [Add UIs]
 
 local Depends = {}
 
@@ -17,6 +17,7 @@ do
     Depends.SModules = Depends.ReplicatedStorage:WaitForChild("Modules")
     Depends.SUtil = Depends.ReplicatedStorage:WaitForChild("Utilities")
     Depends.Remotes = Depends.ReplicatedStorage:WaitForChild("Remotes")
+    Depends.UIs = Depends.ReplicatedStorage:WaitForChild("UIs")
 
     -- Shared - Prebuilt
     Depends.Require = require(Depends.SUtil:WaitForChild("Require"))
