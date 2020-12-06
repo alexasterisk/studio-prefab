@@ -1,116 +1,67 @@
--- ++ 3.12.2020 [Create Notification]
--- TODO
-
--- -- Documentation
--- ++    Module()
--- => Description: Creates a Notification.
--- +>        Arg1: Data = table pairs{string = number | string}
+-- ++ 2.12.2020 [Create Notification]
+-- // 6.12.2020 [Update Notification]
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-local Modules = Depends.Require(Depends.SModules, {"Tween", "Wait"})
+local Modules = Depends.Require(Depends.SModules, {"Tween", "Wait", "Spawn"})
+
+local Overlay = Depends.PlayerGui:WaitForChild("Overlay")
+local Notifications = Overlay:WaitForChild("Notifications")
+
+local Types = {
+    Error = Color3.fromRGB(168, 0, 0),
+    Warn = Color3.fromRGB(176, 126, 0),
+    Success = Color3.fromRGB(0, 141, 35),
+    Basic = Color3.fromRGB(25, 25, 25)
+}
 
 local Functions = {}
 
-local TweenTypes = {
-    Frame = {
+function Functions:CreateNotification(Type, Text)
+    local Notification = Instance.new("Frame", Notifications)
+    local UICorner = Instance.new("UICorner", Notification)
+    local TextLabel = Instance.new("TextLabel", Notification)
+
+    Notification.BackgroundColor3 = Types[Type] or Types.Basic
+    UICorner.CornerRadius = UDim.new(.25, 0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.Size = UDim2.new(1, 0, 1, 0)
+    TextLabel.TextScaled = true
+    TextLabel.TextColor3 = Color3.new(1, 1, 1)
+    TextLabel.Font = Enum.Font.Ubuntu
+
+    if Types[Type] then
+        Notification.Size = UDim2.new(1, 0, .15, 0)
+        TextLabel.Text = Type
+        Notification.Size = UDim2.new(.01, TextLabel.TextBounds.X, .15, 0)
+        Modules.Wait(string.len(Type) / 2)
+
+        Modules.Tween.new(TextLabel, TweenInfo.new(1, Enum.EasingStyle.Exponential), {
+            TextTransparency = 1
+        }, true)
+
+        TextLabel.Text = Text
+        Modules.Tween.new(Notification, TweenInfo.new(1, Enum.EasingStyle.Exponential), {
+            BackgroundColor3 = Types.Basic,
+            Size = UDim2.new(.01, TextLabel.TextBounds.X, .15, 0)
+        }, true).Completed:Wait()
+    end
+
+    TextLabel.Text = Text
+    Modules.Tween.new(TextLabel, TweenInfo.new(1, Enum.EasingStyle.Exponential), {
+        TextTransparency = 0
+    }, true)
+
+    Modules.Wait(1.1 + string.len(Text) / 4)
+
+    Modules.Tween.new(Notification, TweenInfo.new(2.25), {
+        Size = UDim2.new(0, 0, 0, 0),
         BackgroundTransparency = 1,
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    },
+        BackgroundColor3 = Color3.new(0, 0, 0)
+    }, true)
 
-    TextLabel = {
-        TextTransparency = 1,
-        TextColor3 = Color3.fromRGB(20, 20, 20)
-    },
-
-    ImageLabel = {
-        BackgroundTransparency = 1,
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-        ImageTransparency = 1,
-        ImageColor3 = Color3.fromRGB(30, 30, 30)
-    }
-}
-
-function Functions:TweenOut(Frame, Delay)
-    Modules.Wait(Delay)
-    local function TweenNext(I)
-        local Tween = Modules.Tween.new(I, TweenInfo.new(1, Enum.EasingStyle.Exponential), TweenTypes.Frame, true)
-
-        Tween.Completed:Connect(function()
-            Modules.Wait(.5)
-            I:Destroy()
-        end)
-
-        for _, Object in ipairs(I:GetDescendants()) do
-            if TweenTypes[Object.ClassName] then
-                Modules.Tween.new(Object, TweenInfo.new(1, Enum.EasingStyle.Exponential), TweenTypes[Object.ClassName], true)
-            end
-        end
-    end
-
-    if typeof(Frame) == "Instance" then
-        TweenNext(Frame)
-    elseif type(Frame) == "table" then
-        for _, Object in ipairs(Frame) do
-            TweenNext(Object)
-        end
-    end
-
+    Modules.Tween.new(TextLabel, TweenInfo.new(2), {
+        TextTransparency = 1
+    }, true)
 end
 
-function Functions:TweenIn(Frame)
-    Modules.Tween.new(Frame, TweenInfo.new(.75, Enum.EasingStyle.Exponential), {
-        -- TODO: Actually make the tween
-    }, true, {
-        -- TODO: Also todo
-    })
-end
-
-function Functions:CreateHolder()
-    local ScreenGui = Depends.PlayerGui:FindFirstChild("Notifications")
-    if not ScreenGui then
-        ScreenGui = Instance.new("ScreenGui", Depends.PlayerGui)
-        ScreenGui.Name = "Notifications"
-    else
-        Functions:TweenOut(ScreenGui:GetChildren())
-    end
-
-    return ScreenGui
-end
-
-function Functions:AppendData(Frame, Data)
-    if Data.Text then
-        local Label = Instance.new("TextLabel", Frame)
-
-        -- TODO: Actually make the label
-    end
-
-    if Data.Author then
-        local Label = Instance.new("TextLabel", Frame)
-
-        -- TODO: Actually make the label
-    end
-
-    if Data.Image then
-        local Image = Instance.new("ImageLabel", Frame)
-
-        -- Actually make the image
-    end
-
-    return true
-end
-
-function Functions:CreateFrame()
-    local ScreenGui = Functions:CreateHolder()
-    local Frame = Instance.new("Frame", ScreenGui)
-
-    -- TODO: Actually make the frame
-
-    return Frame
-end
-
-return function(Data)
-    local Frame = Functions:CreateFrame()
-    Functions:AppendData(Frame, Data)
-    Functions:TweenIn(Frame)
-    Functions:TweenOut(Frame, Data.Delay or 3)
-end
+return Functions

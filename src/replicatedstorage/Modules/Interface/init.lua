@@ -24,9 +24,8 @@ function Interface:BindButton(Button, OnClick)
     return Button
 end
 
-function Interface:CreateNotification(Data)
-    assert(type(Data) == "table" and type(Data.Text) == "string")
-    return LModules.Notification(Data)
+function Interface:CreateNotification(Type, Text)
+    LModules.Notification:CreateNotification(Type, Text)
 end
 
 return Interface
