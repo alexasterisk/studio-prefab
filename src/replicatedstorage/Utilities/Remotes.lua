@@ -1,5 +1,5 @@
 -- ++ 2.12.2020 [Create Remotes]
--- // 7.12.2020 [FireAllClients and don't duplicate self.Is]
+-- // 7.12.2020 [Update Documentation]
 -- Handle all Remote requests.
 
 -- -- Documentation
@@ -13,7 +13,10 @@
 -- >> +> Arg1: Name = string
 -- >> >> ++      Send(): Function = any
 -- >> >> => Description: Sends the data to the remote.
--- >> >> +>         ...: ... = any
+-- >> >> +>         Arg: ... = any
+-- >> >> ++   SendAll(): Function
+-- >> >> => Description: Sends the data to the remote.
+-- >> >> +>         Arg: ... = any
 
 local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
 local IsClient = Depends.RunService:IsClient()
