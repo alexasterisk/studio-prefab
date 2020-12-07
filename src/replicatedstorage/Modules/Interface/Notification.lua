@@ -32,7 +32,7 @@ function Functions:CreateNotification(Type, Text)
     if Types[Type] then
         Notification.Size = UDim2.new(1, 0, .15, 0)
         TextLabel.Text = Type
-        Notification.Size = UDim2.new(.01, TextLabel.TextBounds.X, .15, 0)
+        Notification.Size = UDim2.new(.01, TextLabel.TextBounds.X, .1, 0)
         Modules.Wait(string.len(Type) / 2)
 
         Modules.Tween.new(TextLabel, TweenInfo.new(1, Enum.EasingStyle.Exponential), {
@@ -43,7 +43,9 @@ function Functions:CreateNotification(Type, Text)
         Modules.Tween.new(Notification, TweenInfo.new(1, Enum.EasingStyle.Exponential), {
             BackgroundColor3 = Types.Basic,
             Size = UDim2.new(.01, TextLabel.TextBounds.X, .15, 0)
-        }, true).Completed:Wait()
+        }, true)
+
+        Modules.Wait(1)
     end
 
     TextLabel.Text = Text
@@ -62,6 +64,9 @@ function Functions:CreateNotification(Type, Text)
     Modules.Tween.new(TextLabel, TweenInfo.new(2), {
         TextTransparency = 1
     }, true)
+
+    Modules.Wait(2.25)
+    Notification:Destroy()
 end
 
 return Functions
