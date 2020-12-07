@@ -1,5 +1,5 @@
 -- ++ 30.11.2020
--- // 6.12.2020 [Add UIs]
+-- // 6.12.2020 [Add PlayerData]
 --
 
 local Depends = {}
@@ -44,6 +44,7 @@ do
         Depends.PlayerScripts = Depends.Player:WaitForChild("PlayerScripts")
         Depends.Modules = Depends.PlayerScripts:WaitForChild("Modules")
         Depends.Utilities = Depends.PlayerScripts:WaitForChild("Utilities")
+        Depends.PlayerData = Depends.ReplicatedStorage:WaitForChild("PlayerData")
 
         -- Client - Prebuilt
         Depends.IsMobile = Depends.UserInputService.TouchEnabled and not Depends.UserInputService.KeyboardEnabled and not Depends.UserInputService.MouseEnabled and not Depends.UserInputService.GamepadEnabled
