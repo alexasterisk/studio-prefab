@@ -1,5 +1,5 @@
 -- ++ 2.12.2020 [Create Remotes]
--- // 3.12.2020 [Server to Client Support]
+-- // 7.12.2020 [FireAllClients and don't duplicate self.Is]
 -- Handle all Remote requests.
 
 -- -- Documentation
@@ -21,11 +21,24 @@ local IsClient = Depends.RunService:IsClient()
 local Remotes = {}
 local Functions = {}
 
+if not IsClient then
+    function Functions:SendAll(...)
+        if self.Is == "Fire" then
+            return Depends.EventKey:FireAllClients(self.Throw, ...)
+        end
+    end
+end
+
 function Functions:Send(...)
     local MasterKey = Depends[self.Is == "Fire" and "EventKey" or "FunctionKey"]
-    self.Is += IsClient and "Server" or "Client"
+    local Is = self.Is .. IsClient and "Server" or "Client"
 
-    return MasterKey[self.Is](MasterKey, self.Throw, ...)
+    if IsClient then
+        return MasterKey[Is](MasterKey, self.Throw, ...)
+    else
+        local Player = ...
+        return MasterKey[Is](MasterKey, Player, self.Throw, ...)
+    end
 end
 
 function Remotes:GetEvent(Name)
