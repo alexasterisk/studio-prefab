@@ -89,7 +89,7 @@ function Math:createBezierFactory(p1x, p1y, p2x, p2y)
                 return aGuessT
             end
             local currentX = calculateBezier(aGuessT, p1x, p2x) - aX
-            aGuessT -= currentX / currentSlope
+            aGuessT = aGuessT - currentX / currentSlope
         end
         return aGuessT
     end
@@ -456,7 +456,7 @@ end
 function Math:newCFrameTween(name, value, updateFunction, time)
     local q = {Math:quaternionFromCFrame(value)}
     CFrameTweenData[name] = {
-        c0 = value, c1 = value, x0 = value.p, x1 = value.[, v0 = Vector3.new(), v1 = Vector3.new(), q0 = q, q1 = q, w0 = {1, 0, 0, 0}, w1 = {1, 0, 0, 0}, t0 = 0, t1 = tick(), time = time or 1, update = updateFunction, tweening = false
+        c0 = value, c1 = value, x0 = value.p, x1 = value.p, v0 = Vector3.new(), v1 = Vector3.new(), q0 = q, q1 = q, w0 = {1, 0, 0, 0}, w1 = {1, 0, 0, 0}, t0 = 0, t1 = tick(), time = time or 1, update = updateFunction, tweening = false
     }
     if updateFunction then
         updateFunction(value)
