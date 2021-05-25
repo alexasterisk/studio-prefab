@@ -1,31 +1,6 @@
--- ++ 2.12.2020
--- // 2.12.2020 [Add Documentation]
--- @module HumanoidAnimatorUtils
+-- 25.05.2021
 
--- -- Documentation
--- ++      Module: table pairs{string = function}
--- => Description: Master Animator functions.
--- >> ++ GetAnimator(): Animator
--- >> =>   Description: Gets the Animator of specified Humanoid.
--- >> +>          Arg1: Humanoid = Humanoid
--- >> ++ StopAnimations()
--- >> =>      Description: Stops all of the Animations of specified Animator.
--- >> +>             Arg1: Animator = Animator
--- >> ?>             Arg2: FadeTime = number
--- >> ++ IsPlaying(): boolean
--- >> => Description: Checks if the Animator is playing the specified Animation.
--- >> +>        Arg1: Animator = Animator
--- >> +>        Arg2: Track: AnimationTrack
--- >> ++ LoadAnimationFromId(): Animation
--- >> =>           Description: Plays the given ID on the Animator.
--- >> +>                  Arg1: Animator = Animator
--- >> +>                  Arg2: AnimationId = number | string
--- >> ++ SetWeightTarget()
--- >> =>       Description: Sets the weight of an Animation if it's not already set.
--- >> +>              Arg1: Track = AnimationTrack
--- >> +>              Arg2: Weight = number
--- >> ?>              Arg3: FadeTime = number
-
+-- Utilities Module
 local Utilities = {}
 
 function Utilities:GetAnimator(Humanoid)

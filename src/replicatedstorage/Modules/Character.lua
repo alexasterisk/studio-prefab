@@ -1,17 +1,6 @@
--- ++ 2.12.2020
--- // 2.12.2020 [Add Documentation]
--- @module characterUtils
+-- 25.05.2021
 
--- -- Documentation
--- ++      Module: table pairs{string = function}
--- => Description: Main handler for character functions.
--- >> ++ GetHumanoid(): Humanoid
--- >> =>   Description: Gets the Humanoid of a Character.
--- >> +>          Arg1: Descendant = Instance
--- >> ++ ForceUnseat()
--- >> =>   Description: Forcefully unsits a Humanoid.
--- >> +>          Arg1: Humanoid = Humanoid
-
+-- Utilities Module
 local Utilities = {}
 
 function Utilities:GetHumanoid(Descendant)
@@ -41,7 +30,5 @@ function Utilities:ForceUnseat(Humanoid)
 
     Humanoid.Sit = false
 end
-
-
 
 return Utilities

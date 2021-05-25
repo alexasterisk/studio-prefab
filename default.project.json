@@ -6,31 +6,31 @@
 
         "ServerScriptService": {
             "$className": "ServerScriptService",
-            "$path": "src/serverscriptservice"
+            "$path": "src/ServerScriptService"
         },
 
         "ServerStorage": {
             "$className": "ServerStorage",
-            "$path": "src/serverstorage"
+            "$path": "src/ServerStorage"
         },
 
         "StarterPlayer": {
             "$className": "StarterPlayer",
             "StarterPlayerScripts": {
                 "$className": "StarterPlayerScripts",
-                "$path": "src/playerscripts"
+                "$path": "src/PlayerScripts"
             }
         },
 
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
-            "$path": "src/replicatedstorage",
+            "$path": "src/ReplicatedStorage",
             "$ignoreUnknownInstances": true
         },
 
         "ReplicatedFirst": {
             "$className": "ReplicatedFirst",
-            "$path": "src/replicatedfirst"
+            "$path": "src/ReplicatedFirst"
         },
 
         "Workspace": {

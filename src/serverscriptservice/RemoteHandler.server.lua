@@ -1,16 +1,25 @@
--- ++ 2.12.2020 [Create RemoteHandler]
--- Handles both Master Remotes.
+-- 25.05.2021
 
-local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
+-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 
-Depends.EventKey.OnServerEvent:Connect(function(Player, Event, ...)
-    if Depends.Modules.Events:FindFirstChild(Event) then
-        require(Depends.Modules.Events[Event])(Player, ...)
+-- Dependencies
+local Utilities = ReplicatedStorage.Utilities
+local Get = require(Utilities.Get)
+
+-- Variables
+local Modules = ServerStorage.Modules
+local Remotes = ReplicatedStorage.Remotes
+
+Remotes.EventKey.OnServerEvent:Connect(function(Player, Event, ...)
+    if Modules.Events[Event] then
+        Get(Event, Modules.Events[Event])(Player, ...)
     end
 end)
 
-Depends.FunctionKey.OnServerInvoke = function(Player, Function, ...)
-    if Depends.Modules.Functions:FindFirstChild(Function) then
-        return require(Depends.Modules.Functions[Function])(Player, ...)
+Remotes.FunctionKey.OnServerInvoke = function(Player, Function, ...)
+    if Modules.Functions[Function] then
+        return Get(Function, Modules.Functions[Function])(Player, ...)
     end
 end

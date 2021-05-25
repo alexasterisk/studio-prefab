@@ -1,20 +1,18 @@
--- ++ 30.11.2020
--- // 1.12.2020 [Server support]
+-- 25.05.2021
 
--- -- Documentation
--- ++    Module(): Function => Number
--- => Description: Just a better wait function.
--- +>        Arg1: Number = Number
+-- Services
+local RunService = game:GetService("RunService")
 
-local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-local IsClient = Depends.RunService:IsClient()
+-- Variables
+local IsClient = RunService:IsClient()
 
+-- Main Module
 return function(Number)
     Number = Number or .0001
     local TimeStarted = tick()
     while true do
         if IsClient then
-            Depends.RunService.Heartbeat:Wait()
+            RunService.Heartbeat:Wait()
         else
             wait()
         end

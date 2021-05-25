@@ -1,62 +1,49 @@
--- ++ 2.12.2020 [Create Remotes]
--- // 7.12.2020 [Update Documentation]
--- Handle all Remote requests.
+-- 25.05.2021
 
--- -- Documentation
--- ++     Remotes: table pairs{string = Function}
--- => Description: Handle all Remote requests.
--- >> ++ GetEvent(): Function = table pairs{string = Function}
--- >> => Description: Gets the correct RemoteEvent for the request.
--- >> +>        Arg1: Name = string
--- >> ++ GetFunction(): Function = table pairs{string = Function}
--- >> => Description: Gets the correct RemoteFunction for the request.
--- >> +> Arg1: Name = string
--- >> >> ++      Send(): Function = any
--- >> >> => Description: Sends the data to the remote.
--- >> >> +>         Arg: ... = any
--- >> >> ++   SendAll(): Function
--- >> >> => Description: Sends the data to the remote.
--- >> >> +>         Arg: ... = any
+-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunSerivce = game:GetService("RunService")
 
-local Depends = require(game:GetService("ReplicatedStorage"):WaitForChild("Depends"))
-local IsClient = Depends.RunService:IsClient()
-
+-- Variables
+local Remotes = ReplicatedStorage.Remotes
+local IsClient = RunSerivce:IsClient()
 local Remotes = {}
 local Functions = {}
 
+-- Functions
 if not IsClient then
     function Functions:SendAll(...)
-        if self.Is == "Fire" then
-            return Depends.EventKey:FireAllClients(self.Throw, ...)
+        if self.Type == "Fire" then
+            return Remotes.EventKey:FireAllClients(self.Name, ...)
         end
     end
 end
 
 function Functions:Send(...)
-    local MasterKey = Depends[self.Is == "Fire" and "EventKey" or "FunctionKey"]
-    local Is = self.Is .. IsClient and "Server" or "Client"
+    local Key = Remotes[self.Type == "Fire" and "Event" or "Function"] .. "Key"
+    local Type = self.Is .. IsClient and "Server" or "Client"
 
     if IsClient then
-        return MasterKey[Is](MasterKey, self.Throw, ...)
+        return Key[Type](Key, self.Name, ...)
     else
         local Player = ...
-        return MasterKey[Is](MasterKey, Player, self.Throw, ...)
+        return Key[Type](Key, Player, self.Name, ...)
     end
 end
 
+-- Main Module
 function Remotes:GetEvent(Name)
-    local Metatable = setmetatable({}, Functions)
-    Metatable.Is = "Fire"
-    Metatable.Throw = Name
-    return Metatable
+    local MT = setmetatable(Functions, {})
+    MT.Key = "Fire"
+    MT.Name = Name
+    return MT
 end
 
 function Remotes:GetFunction(Name)
-    local Metatable = setmetatable({}, Functions)
-    Metatable.Is = "Invoke"
-    Metatable.Throw = Name
-
-    return Metatable
+    local MT = setmetatable(Functions, {})
+    MT.Key = "Invoke"
+    MT.Name = Name
+    return MT
 end
 
 return Remotes
