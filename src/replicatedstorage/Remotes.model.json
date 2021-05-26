@@ -3,11 +3,11 @@
     "ClassName": "Folder",
     "Children": [
         {
-            "Name": "MasterFunctionKey",
+            "Name": "FunctionKey",
             "ClassName": "RemoteFunction"
         },
         {
-            "Name": "MasterEventKey",
+            "Name": "EventKey",
             "ClassName": "RemoteEvent"
         }
     ]
