@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunSerivce = game:GetService("RunService")
 
 -- Variables
-local Remotes = ReplicatedStorage.Remotes
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local IsClient = RunSerivce:IsClient()
 local Remotes = {}
 local Functions = {}

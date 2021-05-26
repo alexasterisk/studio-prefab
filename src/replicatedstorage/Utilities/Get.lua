@@ -1,7 +1,7 @@
 -- 25.05.2021
 
 -- Dependencies
-local Log = require(script.Parent.Log):Define("Get")
+local Log = require(script.Parent:WaitForChild("Log")):Define("Get")
 
 -- Variables
 local ShortenedLocations = {
@@ -22,7 +22,5 @@ return function(Name, Location)
         end
     end
 
-    if Location[Name] and typeof(Location[Name] == "Instance") and Location[Name]:IsA("ModuleScript") then
-        return require(Location[Name])
-    end
+    return require(Location:WaitForChild(Name))
 end

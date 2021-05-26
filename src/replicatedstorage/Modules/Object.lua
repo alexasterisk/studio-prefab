@@ -1,7 +1,8 @@
 -- ++ 25.05.2021
 
 -- Dependencies
-local Get = require(script.Parent.Parent.Utilities.Get)
+local Utilities = script.Parent.Parent:WaitForChild("Utilities")
+local Get = require(Utilities:WaitForChild("Get"))
 local Log = Get("Log", "Utils"):Define("Object")
 
 -- Metatable Module
