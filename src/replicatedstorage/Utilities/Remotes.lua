@@ -7,7 +7,8 @@ local RunSerivce = game:GetService("RunService")
 -- Variables
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local IsClient = RunSerivce:IsClient()
-local Remotes = {}
+
+local Module = {}
 local Functions = {}
 
 -- Functions
@@ -20,7 +21,7 @@ if not IsClient then
 end
 
 function Functions:Send(...)
-    local Key = Remotes[self.Type == "Fire" and "Event" or "Function"] .. "Key"
+    local Key = Remotes:WaitForChild(self.Type == "Fire" and "Event" or "Function" .. "Key", 120)
     local Type = self.Is .. IsClient and "Server" or "Client"
 
     if IsClient then
@@ -32,18 +33,18 @@ function Functions:Send(...)
 end
 
 -- Main Module
-function Remotes:GetEvent(Name)
+function Module:GetEvent(Name)
     local MT = setmetatable(Functions, {})
     MT.Key = "Fire"
     MT.Name = Name
     return MT
 end
 
-function Remotes:GetFunction(Name)
+function Module:GetFunction(Name)
     local MT = setmetatable(Functions, {})
     MT.Key = "Invoke"
     MT.Name = Name
     return MT
 end
 
-return Remotes
+return Module
