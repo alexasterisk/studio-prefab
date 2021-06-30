@@ -1,14 +1,4 @@
 {
     "Name": "Remotes",
-    "ClassName": "Folder",
-    "Children": [
-        {
-            "Name": "FunctionKey",
-            "ClassName": "RemoteFunction"
-        },
-        {
-            "Name": "EventKey",
-            "ClassName": "RemoteEvent"
-        }
-    ]
+    "ClassName": "Folder"
 }
