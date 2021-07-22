@@ -1,134 +1,77 @@
---[[
-{Madwork}
+local RateLimiter = {};
+RateLimiter.Default = nil;
 
--[RateLimiter]---------------------------------------
-	Prevents RemoteEvent spamming; Player references are automatically removed as they leave
-	
-	Members:
-	
-		RateLimiter.Default   [RateLimiter]
-	
-	Functions:
-	
-		RateLimiter.NewRateLimiter(rate) --> [RateLimiter]
-			rate   [number] -- Events per second allowed; Excessive events are dropped
-			
-	Methods [RateLimiter]:
-	
-		RateLimiter:CheckRate(source) --> is_to_be_processed [bool] -- Whether event should be processed
-			source   [any]
-			
-		RateLimiter:CleanSource(source) -- Forgets about the source - must be called for any object that
-			has been passed to RateLimiter:CheckRate() after that object is no longer going to be used;
-			Does not have to be called for Player instances!
-			
-		RateLimiter:Cleanup() -- Forgets all sources
-		
-		RateLimiter:Destroy() -- Make the RateLimiter module forget about this RateLimiter object
-	
---]]
+local Players = game:GetService('Players');
+local PlayerReference = {};
+local RateLimiters = {};
 
-local SETTINGS = {
-	DefaultRateLimiterRate = 120,
-}
+local RateLimiterObject = {};
+RateLimiterObject.__index = RateLimiterObject;
 
------ Service Table -----
+function RateLimiterObject:Check(Source)
+    local Sources = self._Sources;
+    local Clock = os.clock();
 
-local RateLimiter = {
-	Default = nil,
-}
+    local RateTime = Sources[Source];
+    if RateTime ~= nil then
+        RateTime = math.max(Clock, RateTime + self._RatePeriod);
+        if RateTime - Clock < 1 then
+            Sources[Source] = RateTime;
+            return true;
+        else
+            return false;
+        end;
+    else
+        if typeof(Source) == 'Instance' and Source:IsA('Player') and PlayerReference[Source] == nil then
+            return false;
+        end;
 
------ Private Variables -----
+        Sources[Source] = Clock + self._RatePeriod;
+        return true;
+    end;
+end;
 
-local Players = game:GetService("Players")
+function RateLimiterObject:CleanSource(Source)
+    self._Sources[Source] = nil;
+end;
 
-local PlayerReference = {} -- {player = true}
-local RateLimiters = {} -- {rate_limiter = true, ...}
+function RateLimiterObject:Clean()
+    self._Sources = {};
+end;
 
------ Public functions -----
+function RateLimiterObject:Destroy()
+    RateLimiters[self] = nil;
+end;
 
--- RateLimiter object:
-local RateLimiterObject = {
-	--[[
-		_sources = {},
-		_rate_period = 0,
-	--]]
-}
-RateLimiterObject.__index = RateLimiterObject
+function RateLimiter.new(Rate)
+    if Rate <= 0 then
+        error('[RATELIMITER]: Invalid rate!');
+    end;
 
-function RateLimiterObject:CheckRate(source) --> is_to_be_processed [bool] -- Whether event should be processed
-	local sources = self._sources
-	local os_clock = os.clock()
-	
-	local rate_time = sources[source]
-	if rate_time ~= nil then
-		rate_time = math.max(os_clock, rate_time + self._rate_period)
-		if rate_time - os_clock < 1 then
-			sources[source] = rate_time
-			return true
-		else
-			return false
-		end
-	else
-		-- Preventing from remembering players that already left:
-		if typeof(source) == "Instance" and source:IsA("Player")
-			and PlayerReference[source] == nil then
-			return false
-		end
-		sources[source] = os_clock + self._rate_period
-		return true
-	end
-end
+    local rateLimiter = {};
+    rateLimiter._Sources = {};
+    rateLimiter._RatePeriod = 1 / Rate;
 
-function RateLimiterObject:CleanSource(source) -- Forgets about the source - must be called for any object that
-	self._sources[source] = nil
-end
+    setmetatable(rateLimiter, RateLimiterObject);
+    RateLimiters[rateLimiter] = true;
+    return rateLimiter;
+end;
 
-function RateLimiterObject:Cleanup() -- Forgets all sources
-	self._sources = {}
-end
+for _, Player in ipairs(Players:GetPlayers()) do
+    PlayerReference[Player] = true;
+end;
 
-function RateLimiterObject:Destroy() -- Make the RateLimiter module forget about this RateLimiter object
-	RateLimiters[self] = nil
-end
+RateLimiter.Default = RateLimiter.new(200);
 
--- Module functions:
-function RateLimiter.NewRateLimiter(rate) --> [RateLimiter]
-	if rate <= 0 then
-		error("[RateLimiter]: Invalid rate")
-	end
-	
-	local rate_limiter = {
-		_sources = {},
-		_rate_period = 1 / rate,
-	}
-	setmetatable(rate_limiter, RateLimiterObject)
-	
-	RateLimiters[rate_limiter] = true
-	
-	return rate_limiter
-end
+Players.PlayerAdded:Connect(function(Player)
+    PlayerReference[Player] = true;
+end);
 
------ Initialize -----
+Players.PlayerRemoving:Connect(function(Player)
+    PlayerReference[Player] = nil;
+    for rateLimiter in pairs(RateLimiters) do
+        rateLimiter._Sources[Player] = nil;
+    end;
+end);
 
-for _, player in ipairs(Players:GetPlayers()) do
-	PlayerReference[player] = true
-end
-
-RateLimiter.Default = RateLimiter.NewRateLimiter(SETTINGS.DefaultRateLimiterRate)
-
------ Connections -----
-
-Players.PlayerAdded:Connect(function(player)
-	PlayerReference[player] = true
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-	PlayerReference[player] = nil
-	-- Automatic player reference cleanup:
-	for rate_limiter in pairs(RateLimiters) do
-		rate_limiter._sources[player] = nil
-	end
-end)
-
-return RateLimiter
+return RateLimiter;
