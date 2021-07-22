@@ -16,10 +16,8 @@
 
         "StarterPlayer": {
             "$className": "StarterPlayer",
-            "StarterPlayerScripts": {
-                "$className": "StarterPlayerScripts",
-                "$path": "src/PlayerScripts"
-            }
+            "$path": "src/StarterPlayer",
+            "$ignoreUnknownInstances": true
         },
 
         "ReplicatedStorage": {
@@ -37,20 +35,6 @@
             "$className": "Workspace",
             "$properties": {
                 "FilteringEnabled": true
-            }
-        },
-
-        "SoundService": {
-            "$className": "SoundService",
-            "$properties": {
-                "RespectFilteringEnabled": true
-            }
-        },
-        
-        "HttpService": {
-            "$className": "HttpService",
-            "$properties": {
-                "HttpEnabled": true
             }
         }
     }
