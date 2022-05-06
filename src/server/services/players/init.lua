@@ -5,7 +5,7 @@ local ProfileService = import "server/modules/ProfileService"
 
 -- store
 local template = import "./template"
-local ProfileStore = ProfileService.GetProfileStor("data", template)
+local ProfileStore = ProfileService.GetProfileStore("data", template)
 
 ---@class PlayerExt
 local PlayerExt = {}
