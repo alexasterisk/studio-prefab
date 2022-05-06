@@ -46,6 +46,17 @@ function PlayerExt.new(player: Player, funcs: {[string]: (any--[[PlayerExt]]) ->
     return setmetatable(mt, PlayerExt)
 end
 
+--- cleans up the extended player instance and saves their data - maid
+function PlayerExt:cleanup()
+    if self.actual ~= nil and self.actual:IsDescendantOf(Players) then
+        self.actual:Kick()
+    end
+    if self.db ~= nil then
+        self.db:Release()
+    end
+    self = nil
+end
+
 ---@class PlayerConstructor: PlayerExt
 local PlayerConstructor = {}
 PlayerConstructor.cache = {}
