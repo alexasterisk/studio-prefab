@@ -172,6 +172,7 @@ local function isEmpty(t)
 	return next(t) == nil
 end
 
+---@class Promise
 local Promise = {
 	Error = Error,
 	Status = makeEnum("Promise.Status", {"Started", "Resolved", "Rejected", "Cancelled"}),
