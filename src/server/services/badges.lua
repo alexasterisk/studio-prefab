@@ -65,3 +65,16 @@ function BadgeConstructor.new(id: number)
     end)
     return mt
 end
+
+-- cleans up every badge and removes every player - maid
+function BadgeConstructor:cleanup()
+    for i, badge in pairs(self.cache) do
+        self.cache[i] = nil
+        for i2 in ipairs(badge._grantList) do
+            table.remove(badge._grantList, i2)
+        end
+    end
+    self = nil
+end
+
+return BadgeConstructor
