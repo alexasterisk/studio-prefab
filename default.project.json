@@ -1,36 +1,31 @@
 {
-    "name": "Prefab",
-    
+    "name": "prefab",
     "tree": {
         "$className": "DataModel",
-
         "ServerScriptService": {
             "$className": "ServerScriptService",
-            "$path": "src/ServerScriptService"
+            "$path": "src/server"
         },
-
-        "ServerStorage": {
-            "$className": "ServerStorage",
-            "$path": "src/ServerStorage"
-        },
-
         "StarterPlayer": {
             "$className": "StarterPlayer",
-            "$path": "src/StarterPlayer",
-            "$ignoreUnknownInstances": true
+            "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
+                "$path": "src/client"
+            }
         },
-
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
-            "$path": "src/ReplicatedStorage",
-            "$ignoreUnknownInstances": true
+            "$path": "src/shared",
+            "remotes": {
+                "$className": "Folder",
+                "events": {
+                    "$className": "Folder"
+                },
+                "functions": {
+                    "$className": "Folder"
+                }
+            }
         },
-
-        "ReplicatedFirst": {
-            "$className": "ReplicatedFirst",
-            "$path": "src/ReplicatedFirst"
-        },
-
         "Workspace": {
             "$className": "Workspace",
             "$properties": {
