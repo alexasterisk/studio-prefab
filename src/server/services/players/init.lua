@@ -71,3 +71,5 @@ function PlayerConstructor.define(funcs: {[string]: (any--[[PlayerExt]]) -> ()})
         end
     end)
 end
+
+return PlayerConstructor
