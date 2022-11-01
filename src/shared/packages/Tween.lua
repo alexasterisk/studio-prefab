@@ -14,11 +14,11 @@ function tweenNext(object: Instance, info: TweenInfo, dict: {[string]: any}, aut
 end
 
 --- creates a new tween with the passed variables
----@param object Instance | table<number, Instance> the instance(s) being tweened
+---@param object Instance | table<number, Instance> -- the instance(s) being tweened
 ---@param info TweenInfo
----@param dict table<string, any> properties to tween to
----@param auto? boolean if the tween should automatically play
----@param default? table<string, any> the initial properties to start from before tweening
+---@param dict table<string, any> -- properties to tween to
+---@param auto? boolean -- if the tween should automatically play
+---@param default? table<string, any> -- the initial properties to start from before tweening
 ---@return Tween | table<number, Tween>
 return function(object: Instance | {Instance}, info: TweenInfo, dict: {[string]: any}, auto: boolean | nil, default: {[string]: any} | nil): Tween | {Tween}
     if type(object) == "table" then

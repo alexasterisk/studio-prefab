@@ -1,5 +1,3 @@
-std = "roblox"
+std = "roblox+testez"
 
 [rules]
-incorrect_standard_library_use = "allow"
-multiple_statements = "allow"
