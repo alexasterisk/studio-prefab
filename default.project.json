@@ -17,6 +17,7 @@
             "$className": "ReplicatedStorage",
             "$path": "src/shared",
             "remotes": {
+                "$className": "Folder",
                 "events": {
                     "$className": "Folder"
                 },
