@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 
-local import = require(game:GetService("ReplicatedStorage").import)
-local ProfileService = import "server/modules/ProfileService"
+local import = require(game.ReplicatedStorage.Packages.Import)
+local ProfileService = import "@wally/profileService"
 
 -- store
 local template = import "./template"

@@ -6,7 +6,7 @@ local RunService = game:GetService("RunService")
 local IS_SERVER = RunService:IsServer()
 local IS_CLIENT = RunService:IsClient()
 
-local import = require(shared.import) (script)
+local import = require(shared.Packages.Import)
 local logger = import "@wally/logger" "badge"
 local resolver = import "@wally/playerResolvable"
 local Promise = import "@wally/promise"

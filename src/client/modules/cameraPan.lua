@@ -1,5 +1,5 @@
-local import = require(game:GetService("ReplicatedStorage").import)
-local Tween = import "shared/modules/tween"
+local import = require(game.ReplicatedStorage.Packages.Import)
+local Tween = import "@wally/tween"
 
 ---@class CameraPan
 local CameraPan = {}
