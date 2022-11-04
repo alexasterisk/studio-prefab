@@ -11,10 +11,10 @@ local isServer = RunService:IsServer()
 
 local funcs = {}
 
---- Checks if the player has the badge and returns a promise that resolves to a boolean.
---- @param player Player | string | number -- The player resolvable to check the badge of.
---- @param badgeId number -- The id of the badge to check.
---- @return any -- A promise that resolves to a boolean.
+--- Checks if a player has a specified badge and returns a **Promise** that resolves to a `boolean`.
+--- @param player Player | string | number -- *The `PlayerResolvable` to check the badge of.*
+--- @param badgeId number -- *The id of the badge to check.*
+--- @return any -- *A **Promise** that resolves to a `boolean`*.
 function funcs.hasBadge(player: Player | string | number, badgeId: number): any
     player = playerResolver(player)
     if not player then
@@ -32,10 +32,10 @@ function funcs.hasBadge(player: Player | string | number, badgeId: number): any
     end)
 end
 
---- Gives the player the badge and returns a promise that resolves to a boolean. If the function is not being ran on the server then it will throw an error.
---- @param player Player | string | number -- The player resolvable to give the badge to.
---- @param badgeId number -- The id of the badge to give.
---- @return any -- A promise that resolves to a boolean.
+--- Gives a player the badge specified and returns a **Promise** that resolves to a `boolean`. If the function is not being ran on the server then it will throw an error.
+--- @param player Player | string | number -- *The `PlayerResolvable` to give the badge to.*
+--- @param badgeId number -- *The id of the badge to give.*
+--- @return any -- *A **Promise** that resolves to a `boolean`*.
 function funcs.giveBadge(player: Player | string | number, badgeId: number): any
     if not isServer then
         logger.errf("Cannot give badge {badgeId} to {player} because the function is not being ran on the server.", {badgeId, player})
@@ -56,9 +56,9 @@ function funcs.giveBadge(player: Player | string | number, badgeId: number): any
     end)
 end
 
---- Get the info of the badge and returns a promise that resolves to a table.
---- @param badgeId number -- The id of the badge to get the info of.
---- @return any -- A promise that resolves to a table.
+--- Get the `BadgeInfo` of a badge and returns a **Promise** that resolves to a **table**.
+--- @param badgeId number -- *The id of the badge to get the info of.*
+--- @return any -- *A **Promise** that resolves to a **table**.*
 function funcs.getBadgeInfo(badgeId: number): any
     return Promise.new(function(resolve, reject)
         local success, badgeInfo = pcall(function()

@@ -5,17 +5,16 @@ local ProfileService = import "@wally/profileService"
 local logger = import "@wally/logger" "profiles"
 local Promise = import "@wally/promise"
 
--- store
 local template = import "./template"
 local ProfileStore = ProfileService.GetProfileStore("data", template)
 
 local profiles = {}
 profiles.loaded = {}
 
---- Loads the profile of the player and returns a promise that resolves to a table. If the profile is already loaded then it will return the loaded profile. If the player is not in game then it will throw an error.
---- @param player Player -- The player to load the profile of.
---- @param doneLoading fun(profile: any) -- The function to call when the profile is done loading.
---- @return any -- A promise that resolves to a table.
+--- Loads the **Profile** of the **Player** and returns a **Promise** resolving to the **Profile**. If the **Profile** is already loaded, then it will return the loaded **Profile**. If the **Player** is not in game then it will throw an error.
+--- @param player Player -- *The **Player** to load the **Profile** of.*
+--- @param doneLoading fun(profile: any) -- *The function to call when the **Profile** is done loading.*
+--- @return any -- *A **Promise** that resolves to a `Profile`.*
 function profiles.loadProfile(player: Player, doneLoading: (any) -> ()): any
     if not player then
         logger.errf("Player {player} is not currently in game.", {player})
@@ -45,14 +44,14 @@ function profiles.loadProfile(player: Player, doneLoading: (any) -> ()): any
     end)
 end
 
---- Get the profile of a player. If the profile is loaded then return it.
---- @param player Player -- The player to get the profile of.
---- @return any -- The profile of the player.
+--- Get the **Profile** of a **Player**. If the **Profile** is loaded then return it.
+--- @param player Player -- *The **Player** to get the **Profile** of.*
+--- @return any -- *The Player's **Profile**.*
 function profiles.getProfile(player: Player): any
     return profiles.loaded[player]
 end
 
---- When a player leaves save their profile and remove it from the loadedProfiles table.
+--- When a **Player** leaves, save their **Profile** and remove it from the `loadedProfiles` **table**.
 Players.PlayerRemoving:Connect(function(player: Player)
     local profile = profiles.loaded[player]
     if profile ~= nil then
