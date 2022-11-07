@@ -1,26 +1,24 @@
 local BadgeService = game:GetService("BadgeService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local import = require(ReplicatedStorage.packages.Import)
 
-local Promise = import "@wally/promise"
-local logger = import "@wally/logger" "badge"
-local playerResolver = import "@wally/playerResolver"
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local playerResolver = require(ReplicatedStorage.Packages.PlayerResolvable)
 
 local isServer = RunService:IsServer()
 
 local funcs = {}
 
 --- Checks if a player has a specified badge and returns a **Promise** that resolves to a `boolean`.
---- @param player Player | string | number -- *The `PlayerResolvable` to check the badge of.*
+--- @param player Player -- *The `PlayerResolvable` to check the badge of.*
 --- @param badgeId number -- *The id of the badge to check.*
 --- @return any -- *A **Promise** that resolves to a `boolean`*.
-function funcs.hasBadge(player: Player | string | number, badgeId: number): any
-    player = playerResolver(player)
-    if not player then
-        logger.errf("Player {player} is not currently in game.", {player})
-    end
+function funcs.hasBadge(player: Player, badgeId: number): any
     return Promise.new(function(resolve, reject)
+        player = playerResolver(player)
+        if not player then
+            return reject("Invalid player.")
+        end
         local success, hasBadge = pcall(function()
             return BadgeService:UserHasBadgeAsync(player.UserId, badgeId)
         end)
@@ -33,18 +31,18 @@ function funcs.hasBadge(player: Player | string | number, badgeId: number): any
 end
 
 --- Gives a player the badge specified and returns a **Promise** that resolves to a `boolean`. If the function is not being ran on the server then it will throw an error.
---- @param player Player | string | number -- *The `PlayerResolvable` to give the badge to.*
+--- @param player Player -- *The `PlayerResolvable` to give the badge to.*
 --- @param badgeId number -- *The id of the badge to give.*
 --- @return any -- *A **Promise** that resolves to a `boolean`*.
-function funcs.giveBadge(player: Player | string | number, badgeId: number): any
-    if not isServer then
-        logger.errf("Cannot give badge {badgeId} to {player} because the function is not being ran on the server.", {badgeId, player})
-    end
-    player = playerResolver(player)
-    if not player then
-        logger.errf("Player {player} is not currently in game.", {player})
-    end
+function funcs.giveBadge(player: Player, badgeId: number): any
     return Promise.new(function(resolve, reject)
+        if not isServer then
+            return reject("Cannot give badge to player because the function is not being ran on the server.")
+        end
+        player = playerResolver(player)
+        if not player then
+            return reject("Invalid player.")
+        end
         local success, hasBadge = pcall(function()
             return BadgeService:GiveBadge(player.UserId, badgeId)
         end)

@@ -1,23 +1,22 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local import = require(ReplicatedStorage.packages.Import)
-local Promise = import "@wally/promise"
-local tween = import "@wally/tween"
-local logger = import "@wally/logger" "camera"
-local playerResolver = import "@wally/playerResolver"
+local Promise = require(ReplicatedStorage.Packages.Promise)
+local tween = require(ReplicatedStorage.Packages.Tween)
+local playerResolver = require(ReplicatedStorage.Packages.PlayerResolvable)
 
 local isServer = RunService:IsServer()
 
 local funcs = {}
 
 --- Gets the `Camera` of the **Player** and returns a **Promise** that resolves to a `Camera`.
---- @param player Player | string | number -- *The `PlayerResolvable` to get the camera of.*
+--- @param player Player -- *The `PlayerResolvable` to get the camera of.*
 --- @return any -- *A **Promise** that resolves to a `Camera`.*
-function funcs.getCamera(player: Player | string | number): any
+function funcs.getCamera(player: Player): any
     player = playerResolver(player)
     if not player then
-        logger.errf("Player {player} is not currently in game.", {player})
+        return Promise.reject("Player is not currently in game.")
     end
     return Promise.new(function(resolve, reject)
         local success, camera = pcall(function()
@@ -32,16 +31,17 @@ function funcs.getCamera(player: Player | string | number): any
 end
 
 --- Pans the given `Camera` and when it is done it will resolve **Promise**. This function will not run on the server.
---- @param camera Camera -- *The `Camera` to pan.*
 --- @param cframe CFrame -- *The **CFrame** to pan to.*
 --- @param duration number -- *The duration of the pan.*
 --- @return any -- *A **Promise** that resolves when the pan is done.*
-function funcs.panCamera(camera: Camera, cframe: CFrame, duration: number)
-    return Promise.new(function(resolve, reject)
-        if isServer then
-            logger.warnf("Cannot pan camera {camera} because the function is being ran on the server.", {camera})
-            reject("Cannot pan camera because the function is being ran on the server.")
-        end
+function funcs.panCamera(cframe: CFrame, duration: number)
+    if isServer then
+        return Promise.reject("Cannot pan camera on server.")
+    end
+
+    local camera = workspace.CurrentCamera
+
+    return Promise.new(function(resolve)
         local playingTween = tween(camera, TweenInfo.new(duration), { CFrame = cframe }, true)
         playingTween.Completed:Connect(function()
             resolve()
@@ -50,17 +50,20 @@ function funcs.panCamera(camera: Camera, cframe: CFrame, duration: number)
 end
 
 --- Shakes the given `Camera` with a given intensity. If `intensity` is not given then it will default to **0.5**. This will provide methods to `start` and `stop` the shake. This function will not run on the server.
---- @param camera Camera -- *The `Camera` to shake.*
 --- @param intensity? number -- *The intensity of the shake.*
 --- @return table<string, function> -- *A **table** with methods to `start` and `stop` the shake.*
-function funcs.shakeCamera(camera: Camera, intensity: number?)
+function funcs.shakeCamera(intensity: number?)
     if isServer then
-        return logger.warnf("Cannot shake camera {camera} because the function is being ran on the server.", {camera})
+        warn("Cannot shake camera because the function is being ran on the server.")
+        return
     end
 
     local shake = {}
     local connection = nil
     intensity = intensity or 0.5
+
+    local camera = workspace.CurrentCamera
+    local originalCFrame = camera.CFrame
 
     --- Takes a given duration and shakes the `Camera` for that duration. If `duration` is not given or is -1 then it will shake the camera until `stopShake` is called.
     --- @param duration? number -- *The duration of the shake.*
@@ -68,15 +71,16 @@ function funcs.shakeCamera(camera: Camera, intensity: number?)
     function shake.start(duration: number?)
         return Promise.new(function(resolve, reject)
             if connection then
-                logger.warnf("Cannot start shake on camera {camera} because it is already shaking.", {camera})
                 reject("Cannot start shake on camera because it is already shaking.")
             end
             local startTime = tick()
             connection = RunService.Heartbeat:Connect(function()
+                originalCFrame = camera.CFrame
                 local time = tick() - startTime
                 local x = math.sin(time * 10) * intensity
                 local y = math.cos(time * 10) * intensity
-                camera.CFrame = camera.CFrame * CFrame.new(x, y, 0)
+                camera.CFrame = originalCFrame * CFrame.new(x, y, 0)
+                camera.CFrame = originalCFrame * CFrame.new(x, y, 0)
                 if duration and duration ~= -1 and time >= duration then
                     resolve()
                     shake.stopShake()
@@ -88,30 +92,33 @@ function funcs.shakeCamera(camera: Camera, intensity: number?)
     --- Stops the shake on the `Camera`. If the `Camera` is not shaking then it will warn.
     function shake.stop()
         if not connection then
-            return logger.warnf("Cannot stop shake on camera {camera} because it is not shaking.", {camera})
+            warn("Cannot stop shake on camera because it is not shaking.")
+            return
         end
         connection:Disconnect()
         connection = nil
+        camera.CFrame = originalCFrame
     end
 
     return shake
 end
 
--- Does a *panorama shot* around a given `Instance` with a `speed`, `angle`, and a `radius`. This function will not run on the server. This will provide a `start` and `stop` method.
---- @param camera Camera -- *The `Camera` to do the panorama shot with.*
+-- Does a *panorama shot* around a given `Instance` with a `speed` and a `radius`. This function will not run on the server. This will provide a `start` and `stop` method.
 --- @param part Instance -- *The `Instance` to do the panorama shot around.*
 --- @param speed number -- *The speed of the panorama shot.*
---- @param angle number -- *The angle of the panorama shot.*
 --- @param radius number -- *The radius of the panorama shot.*
 --- @return table<string, function> -- *A **table** with methods to `start` and `stop` the panorama shot.*
-function funcs.panoramaShot(camera: Camera, part: Instance, speed: number, angle: number, radius: number)
+function funcs.panoramaShot(part: Instance, speed: number, radius: number)
     if isServer then
-        return logger.warnf("Cannot do panorama shot on camera {camera} because the function is being ran on the server.", {camera})
+        warn("Cannot do panorama shot because the function is being ran on the server.")
+        return
     end
 
     local panorama = {}
-    local promiseResolve = nil
-    local connection = nil
+    local promiseResolve
+    local connection
+
+    local camera = workspace.CurrentCamera
 
     --- Takes a given duration and does a panorama shot for that duration. If `duration` is not given or is -1 then it will do the panorama shot until `stop` is called.
     --- @param duration? number -- *The duration of the panorama shot.*
@@ -119,16 +126,21 @@ function funcs.panoramaShot(camera: Camera, part: Instance, speed: number, angle
     function panorama.start(duration: number?)
         return Promise.new(function(resolve, reject)
             if connection then
-                logger.warnf("Cannot start panorama shot on camera {camera} because it is already doing a panorama shot.", {camera})
-                reject("Cannot start panorama shot on camera because it is already doing a panorama shot.")
+                reject("Cannot start panorama shot because it is already doing a panorama shot.")
             end
+
+            camera.CameraType = Enum.CameraType.Scriptable
+            camera.CameraSubject = part
+
             promiseResolve = resolve
             local startTime = tick()
+
+            -- This will rotate the camera around the part on the XZ plane while always looking at the part.
             connection = RunService.Heartbeat:Connect(function()
                 local time = tick() - startTime
                 local x = math.sin(time * speed) * radius
-                local y = math.cos(time * speed) * radius
-                camera.CFrame = CFrame.new(part.Position + Vector3.new(x, y, 0)) * CFrame.Angles(0, math.rad(angle), 0)
+                local z = math.cos(time * speed) * radius
+                camera.CFrame = CFrame.new(part.Position + Vector3.new(x, 0, z), Vector3.new(part.Position.X, part.Position.Y - 5, part.Position.Z))
                 if duration and duration ~= -1 and time >= duration then
                     resolve()
                     panorama.stop()
@@ -140,15 +152,25 @@ function funcs.panoramaShot(camera: Camera, part: Instance, speed: number, angle
     --- Stops the panorama shot on the `Camera`. If the `Camera` is not doing a panorama shot then it will warn. This will use `promiseResolve` to resolve the started **Promise** if it exists.
     function panorama.stop()
         if not connection then
-            logger.warnf("Cannot stop panorama shot on camera {camera} because it is not doing a panorama shot.", {camera})
+            warn("Cannot stop panorama shot because it is not doing a panorama shot.")
             return
         end
+
         connection:Disconnect()
         connection = nil
-        if promiseResolve then
-            promiseResolve()
-            promiseResolve = nil
-        end
+
+        local character = Players.LocalPlayer.Character
+
+        -- Slowly brings the camera to be right behind the character. This is done to make it look like the camera is moving back to the character.
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+        local twee = tween(camera, tweenInfo, { CFrame = CFrame.new(character.Head.Position + Vector3.new(12.5, 3, 0), character.Head.Position) }, true)
+        twee.Completed:Connect(function()
+            camera.CameraType = Enum.CameraType.Custom
+            camera.CameraSubject = character.Humanoid
+            if promiseResolve then
+                promiseResolve()
+            end
+        end)
     end
 
     return panorama

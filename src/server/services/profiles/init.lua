@@ -1,11 +1,11 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
-local import = require(game.ReplicatedStorage.packages.Import) (script)
-local ProfileService = import "@wally/profileService"
-local logger = import "@wally/logger" "profiles"
-local Promise = import "@wally/promise"
+local ProfileService = require(ReplicatedStorage.Packages.ProfileService)
+local logger = require(ReplicatedStorage.Packages.Logger) "ProfileService"
+local Promise = require(ReplicatedStorage.Packages.Promise)
 
-local template = import "./template"
+local template = require(script.template)
 local ProfileStore = ProfileService.GetProfileStore("data", template)
 
 local profiles = {}

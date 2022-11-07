@@ -16,16 +16,16 @@
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
             "$path": "src/shared",
-            "remotes": {
+            "Remotes": {
                 "$className": "Folder",
-                "events": {
+                "Events": {
                     "$className": "Folder"
                 },
-                "functions": {
+                "Functions": {
                     "$className": "Folder"
                 }
             },
-            "packages": {
+            "Packages": {
                 "$path": "Packages",
                 "$ignoreUnknownInstances": true
             }
